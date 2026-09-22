@@ -1,20 +1,18 @@
-#!/usr/bin/env python3
 """local-jev runtime and bootstrapper."""
 
 from __future__ import annotations
 
 import argparse
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import math
 import os
-from pathlib import Path
 import subprocess
 import sys
 import threading
 import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from typing import Any
-
 
 VERSION = "0.1.0"
 LETTERS = "ABCDEFGHIJKLMNOP"
@@ -225,7 +223,7 @@ def request_to_rows(payload: dict[str, Any]) -> tuple[list[dict[str, Any]], dict
         if not isinstance(qid, str) or not qid:
             raise ValueError("question ids must be nonempty strings")
         if not isinstance(question, dict):
-            raise ValueError(f"{qid}: question must be an object")
+            raise TypeError(f"{qid}: question must be an object")
         qtype = question.get("type")
         instructions = as_text(question.get("instructions"))
         criteria = question.get("criteria")
@@ -378,13 +376,14 @@ def make_handler(api: Api):
                 length = int(self.headers.get("content-length", "0"))
                 payload = json.loads(self.rfile.read(length).decode("utf-8"))
                 if not isinstance(payload, dict):
-                    raise ValueError("request body must be a JSON object")
+                    raise TypeError("request body must be a JSON object")
                 self.send_json(200, api.systemone(payload))
-            except Exception as error:
+            except (json.JSONDecodeError, TypeError, ValueError, RuntimeError, OSError) as error:
                 self.send_json(422, {"error": str(error)})
 
         def log_message(self, fmt: str, *args: Any) -> None:
-            sys.stderr.write("%s - %s\n" % (self.address_string(), fmt % args))
+            message = fmt % args
+            sys.stderr.write(f"{self.address_string()} - {message}\n")
 
     return Handler
 
