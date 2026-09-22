@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>local-jev</title>
-  <meta name="description" content="Run a local Jev-shaped decision API over small GGUF models.">
+  <meta name="description" content="Run a local Jev-style decision API over small GGUF models.">
   <style>
     :root {
       color-scheme: light dark;
@@ -108,7 +108,7 @@
   <main>
     <header>
       <h1>local-jev</h1>
-      <p>Run a local Jev-shaped decision API over small GGUF models.</p>
+      <p>Run the Jev/System One pattern locally, without a hosted model call.</p>
       <div class="actions">
         <a class="primary" href="https://github.com/ra-yavuz/local-jev">Source</a>
         <a href="https://github.com/ra-yavuz/local-jev/releases">Releases</a>
@@ -120,15 +120,27 @@
       <h2>What It Is</h2>
       <p>
         local-jev is a small local service for typed decisions: yes or no,
-        multiple choice, and ordered ratings. It is not official TypeSafe Jev.
-        It runs local GGUF models through llama.cpp and reads the answer option
-        probabilities from logits instead of generating prose.
+        multiple choice, and ordered ratings. It packages the Jev-style idea
+        into a local tool that downloads an open GGUF model, runs llama.cpp,
+        and reads answer probabilities from logits instead of generating prose.
+        It is not official TypeSafe Jev and does not include TypeSafe weights.
       </p>
       <div class="grid">
         <div class="item"><strong>Local by default</strong><span>Runs on your machine after downloading a GGUF model.</span></div>
-        <div class="item"><strong>Kev-style API</strong><span>Accepts <code>POST /v1/systemone</code> requests.</span></div>
-        <div class="item"><strong>Small setup</strong><span>Creates its own venv and model directory under your home folder.</span></div>
+        <div class="item"><strong>Jev-style decisions</strong><span>Use fixed answer options for <code>noul</code>, <code>choice</code>, and <code>score</code>.</span></div>
+        <div class="item"><strong>Kev-style API</strong><span>Accepts <code>POST /v1/systemone</code> requests on localhost.</span></div>
+        <div class="item"><strong>Agent-friendly</strong><span>Route tasks, check policy, classify relevance, or gate tool calls.</span></div>
       </div>
+    </section>
+
+    <section>
+      <h2>Why It Exists</h2>
+      <p>
+        Not every model call needs a chat answer. Agents and automation often
+        need a small structured decision: is this true, which route fits, or
+        how severe is this? local-jev gives that workflow a local package and
+        a familiar HTTP surface.
+      </p>
     </section>
 
     <section>

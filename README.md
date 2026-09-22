@@ -1,17 +1,47 @@
 # local-jev
 
-**Run a local Jev-shaped decision API over small GGUF models.**
+> A local Jev-style decision API for typed yes, choice, and score questions.
 
-local-jev gives you a tiny local service for typed decisions: yes or no
-(`noul`), multiple choice (`choice`), and ordered ratings (`score`). It is
-not official TypeSafe Jev, and it does not include any TypeSafe model
-weights. It is a practical local wrapper around GGUF models and direct
-next-token logits.
+**Run the Jev/System One pattern locally, without a hosted model call.**
 
-The goal is simple: install the package, run setup once, then start a local
-`/v1/systemone` API.
+Jev made a useful idea feel obvious: many agent and workflow decisions do not
+need a chat response. They need a typed answer. Is this true? Which option
+fits? How severe is it?
 
-## What it does
+local-jev packages that pattern for local machines. It installs a small
+runtime, downloads an open GGUF model, and exposes a Kev-style
+`/v1/systemone` API for:
+
+- yes or no decisions (`noul`)
+- multiple-choice routing (`choice`)
+- ordered ratings (`score`)
+
+It is not official TypeSafe Jev, does not include TypeSafe weights, and is not
+endorsed by TypeSafe. It is a practical local approximation of the Jev-style
+interface, using llama.cpp and direct next-token logits over declared answer
+options.
+
+The appeal is speed, privacy, and simple integration: install the package, run
+setup once, then ask local typed questions over HTTP.
+
+## Why It Is Interesting
+
+Jev-style models are exciting because they turn language-model work into
+cheap, structured decisions. That is useful for agents, automation, and
+backend services where the desired output is not prose.
+
+local-jev gives you a local version of that workflow:
+
+- Route support tickets without sending text to a hosted API.
+- Ask an agent guardrail question before a tool call.
+- Classify whether a document is about a named person.
+- Score urgency, severity, relevance, or policy fit.
+- Replace fragile prompt-to-JSON flows with fixed answer options.
+
+It is deliberately small. The default model is good for trying the workflow,
+and the larger preset is there when you want better local behavior.
+
+## What It Does
 
 - Downloads a small GGUF model on first setup.
 - Creates an isolated runtime venv under `~/.local/share/local-jev`.
@@ -19,6 +49,8 @@ The goal is simple: install the package, run setup once, then start a local
 - Accepts Kev-style `POST /v1/systemone` requests.
 - Scores declared options directly from model logits. It does not generate
   prose.
+- Keeps the installed `.deb` small. Model files are downloaded by
+  `local-jev setup`.
 
 Default model:
 
@@ -148,7 +180,18 @@ Question types:
 
 local-jev supports 2 to 16 options per scored question.
 
-## How it works
+## Relationship To Jev
+
+local-jev is Jev-style, not Jev.
+
+- It follows the typed-decision shape popularized by TypeSafe Jev and System
+  One style APIs.
+- It uses local open GGUF models, not TypeSafe Jev weights.
+- It is meant for experimentation, local tools, and agent-side checks.
+- It should be validated before production use, especially in high-impact
+  workflows.
+
+## How It Works
 
 local-jev renders each decision as evidence, a criterion, and a short option
 list labelled `A` through `P`. It evaluates the prompt with `llama-cpp-python`

@@ -475,7 +475,7 @@ def cmd_status(args: argparse.Namespace) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="local-jev",
-        description="Run a local Jev-shaped decision API over GGUF models.",
+        description="Run a local Jev-style decision API over GGUF models.",
         epilog=DISCLAIMER,
     )
     parser.add_argument("--home", help="data directory for runtime venv and models")

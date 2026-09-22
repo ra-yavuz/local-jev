@@ -32,7 +32,7 @@ Architecture: all
 Depends: bash (>= 4.0), python3 (>= 3.10), python3-venv, python3-pip, python3-dev, build-essential, cmake, ca-certificates
 Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
 Homepage: https://github.com/ra-yavuz/local-jev
-Description: local Jev-shaped decision API over GGUF models
+Description: local Jev-style decision API over GGUF models
  local-jev runs a small local HTTP service for typed decisions: yes or no,
  multiple choice, and ordered ratings. It creates an isolated Python runtime
  under the user's home directory, downloads a selected GGUF model, and serves
