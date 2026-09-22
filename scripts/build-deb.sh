@@ -22,6 +22,7 @@ install -m 0644 "$ROOT/README.md"                             "$PKG_DIR/usr/shar
 install -m 0644 "$ROOT/LICENSE"                               "$PKG_DIR/usr/share/doc/local-jev/copyright"
 install -m 0644 "$ROOT/docs/index.html"                       "$PKG_DIR/usr/share/doc/local-jev/html/index.html"
 install -m 0755 "$ROOT/scripts/try-kev.sh"                    "$PKG_DIR/usr/share/doc/local-jev/examples/try-kev.sh"
+install -m 0755 "$ROOT/scripts/benchmark-routing.py"          "$PKG_DIR/usr/share/doc/local-jev/examples/benchmark-routing.py"
 install -m 0755 "$ROOT/debian/postinst"                       "$PKG_DIR/DEBIAN/postinst"
 install -m 0755 "$ROOT/debian/postrm"                         "$PKG_DIR/DEBIAN/postrm"
 

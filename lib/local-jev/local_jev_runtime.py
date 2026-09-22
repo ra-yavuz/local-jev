@@ -14,7 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 LETTERS = "ABCDEFGHIJKLMNOP"
 DISCLAIMER = (
     "DISCLAIMER: local-jev is provided AS IS, without warranty. Model output "
@@ -22,9 +22,9 @@ DISCLAIMER = (
     "its results."
 )
 RUNTIME_DEPS = [
-    "huggingface-hub==1.31.0",
+    "huggingface-hub>=1.31.0,<2",
     "llama-cpp-python==0.3.35",
-    "numpy==2.2.6",
+    "numpy>=2.2.6",
 ]
 MODEL_PRESETS = {
     "qwen3-0.6b-q4": {
@@ -55,7 +55,7 @@ def runtime_python(home: Path) -> Path:
 
 
 def running_in_runtime(home: Path) -> bool:
-    return Path(sys.executable).resolve() == runtime_python(home).resolve()
+    return Path(sys.prefix).resolve() == (home / "venv").resolve()
 
 
 def run_checked(command: list[str], env: dict[str, str] | None = None) -> None:

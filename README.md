@@ -290,6 +290,25 @@ By default, the script uses Kev on `127.0.0.1:8009` and local-jev on
 larger Kev model. In the Debian package, the same helper is installed as
 `/usr/share/doc/local-jev/examples/try-kev.sh`.
 
+## Benchmark Smoke Test
+
+The repository includes a small reproducibility script with 100 generic
+support-routing examples. Start a warm local server, then run the script:
+
+```bash
+local-jev serve --host 127.0.0.1 --port 8012
+LOCAL_JEV_BENCHMARK_URL=http://127.0.0.1:8012/v1/systemone \
+  scripts/benchmark-routing.py > benchmark-routing-100.json
+```
+
+On one local CPU run with the default Qwen3 0.6B Q4_K_M preset, the smoke test
+returned 42 correct and 58 wrong answers. Median latency was 997 ms, and the
+95th percentile latency was 2389 ms. The five answers with confidence at or
+above 0.75 were all correct, but the middle confidence bands were noisy. Treat
+these scores as signals to validate, not as calibrated truth. In the Debian
+package, the same helper is installed as
+`/usr/share/doc/local-jev/examples/benchmark-routing.py`.
+
 ## Limits
 
 - The default model is small and can be overconfident.

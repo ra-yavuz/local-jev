@@ -1,3 +1,11 @@
+local-jev (0.1.3) stable; urgency=medium
+
+  * Relax runtime dependency pins so setup can use Python 3.14 wheels.
+  * Detect the isolated runtime by venv prefix, not by resolved symlink path.
+  * Add a reproducible 100-case routing smoke-test helper.
+
+ -- Ramazan Yavuz <yavuzramazan1994@gmail.com>  Tue, 22 Sep 2026 16:28:00 +0300
+
 local-jev (0.1.2) stable; urgency=medium
 
   * Remove shared apt repository publishing from the release workflow.

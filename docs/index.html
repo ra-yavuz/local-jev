@@ -194,6 +194,19 @@ bin/local-jev serve</code></pre>
     </section>
 
     <section>
+      <h2>Benchmark Smoke Test</h2>
+      <p>
+        The repository includes <code>scripts/benchmark-routing.py</code>, a
+        100-case support-routing smoke test. On one local CPU run with the
+        default Qwen3 0.6B Q4_K_M preset, it returned 42 correct and 58 wrong
+        answers. Median latency was 997 ms, and the 95th percentile latency
+        was 2389 ms. The five answers with confidence at or above 0.75 were
+        all correct, but the middle confidence bands were noisy. Treat the
+        scores as validation signals, not calibrated truth.
+      </p>
+    </section>
+
+    <section>
       <h2>Disclaimer</h2>
       <p class="notice">
         local-jev downloads and runs third-party model files and uses model
