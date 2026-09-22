@@ -111,17 +111,20 @@ local-jev ask \
 
 ## <a name="install"></a>Install
 
+From a source checkout:
+
+```bash
+git clone https://github.com/ra-yavuz/local-jev
+cd local-jev
+bin/local-jev setup
+bin/local-jev serve
+```
+
 From a release `.deb`:
 
 ```bash
-sudo apt install ./local-jev_*.deb
+sudo dpkg -i ./local-jev_*.deb
 local-jev setup
-```
-
-From the signed apt repository, after this project is published:
-
-```bash
-sudo bash -c 'set -e; install -m 0755 -d /etc/apt/keyrings && curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg -o /etc/apt/keyrings/ra-yavuz.gpg && echo "deb [signed-by=/etc/apt/keyrings/ra-yavuz.gpg] https://ra-yavuz.github.io/apt stable main" > /etc/apt/sources.list.d/ra-yavuz.list && apt update && apt install -y local-jev'
 ```
 
 ## Commands

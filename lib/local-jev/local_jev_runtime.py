@@ -14,7 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 LETTERS = "ABCDEFGHIJKLMNOP"
 DISCLAIMER = (
     "DISCLAIMER: local-jev is provided AS IS, without warranty. Model output "
