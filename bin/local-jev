@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOURCE_ROOT=$(cd "$(dirname "$0")/.." && pwd)
+if [ -f "$SOURCE_ROOT/lib/local-jev/local_jev_runtime.py" ]; then
+  LIB_DIR="$SOURCE_ROOT/lib/local-jev"
+else
+  LIB_DIR="${LOCAL_JEV_LIB:-/usr/lib/local-jev}"
+fi
+
+exec python3 "$LIB_DIR/local_jev_runtime.py" "$@"

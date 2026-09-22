@@ -1,0 +1,28 @@
+Source: local-jev
+Section: utils
+Priority: optional
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://github.com/ra-yavuz/local-jev
+Vcs-Git: https://github.com/ra-yavuz/local-jev.git
+Vcs-Browser: https://github.com/ra-yavuz/local-jev
+Rules-Requires-Root: no
+
+Package: local-jev
+Architecture: all
+Depends: ${misc:Depends}, bash (>= 4.0), python3 (>= 3.10), python3-venv, python3-pip, python3-dev, build-essential, cmake, ca-certificates
+Description: local Jev-shaped decision API over GGUF models
+ local-jev runs a small local HTTP service for typed decisions: yes or no,
+ multiple choice, and ordered ratings. It creates an isolated Python runtime
+ under the user's home directory, downloads a selected GGUF model, and serves
+ a Kev-style /v1/systemone API on localhost.
+ .
+ The package does not include model weights. Run local-jev setup after
+ installing to download the default model and runtime dependencies.
+ .
+ DISCLAIMER: local-jev downloads and runs third-party model files and uses
+ model output to score decisions. It is provided AS IS, WITHOUT WARRANTY OF
+ ANY KIND. The author is not liable for any harm, data loss, security
+ incident, model output, model download, classification result, or other
+ damages. By installing or running it you accept full responsibility.

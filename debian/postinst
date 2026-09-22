@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "local-jev installed."
+echo "DISCLAIMER: local-jev is provided AS IS, without warranty. Model output is unreliable. You accept all risk."
+echo "Next step: run 'local-jev setup', then 'local-jev serve'."

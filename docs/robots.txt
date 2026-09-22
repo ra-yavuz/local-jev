@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ra-yavuz.github.io/local-jev/sitemap.xml

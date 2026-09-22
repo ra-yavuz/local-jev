@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>local-jev</title>
+  <meta name="description" content="Run a local Jev-shaped decision API over small GGUF models.">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #111316;
+      --panel: #1d2025;
+      --text: #f4f1e8;
+      --muted: #b9b4a8;
+      --line: #363b43;
+      --accent: #5fd0aa;
+      --accent-2: #f0b35a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0 64px;
+    }
+    header {
+      padding: 28px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2.2rem, 6vw, 4.4rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 34px 0 12px;
+      font-size: 1.35rem;
+    }
+    p { color: var(--muted); }
+    a { color: var(--accent); }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+    pre {
+      overflow: auto;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 6px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--panel);
+    }
+    .actions a.primary {
+      background: var(--accent);
+      color: #07120f;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 14px;
+      background: var(--panel);
+    }
+    .item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .notice {
+      border-left: 4px solid var(--accent-2);
+      padding: 12px 14px;
+      background: var(--panel);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>local-jev</h1>
+      <p>Run a local Jev-shaped decision API over small GGUF models.</p>
+      <div class="actions">
+        <a class="primary" href="https://github.com/ra-yavuz/local-jev">Source</a>
+        <a href="https://github.com/ra-yavuz/local-jev/releases">Releases</a>
+        <a href="https://github.com/ra-yavuz/local-jev#install">Install</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>What It Is</h2>
+      <p>
+        local-jev is a small local service for typed decisions: yes or no,
+        multiple choice, and ordered ratings. It is not official TypeSafe Jev.
+        It runs local GGUF models through llama.cpp and reads the answer option
+        probabilities from logits instead of generating prose.
+      </p>
+      <div class="grid">
+        <div class="item"><strong>Local by default</strong><span>Runs on your machine after downloading a GGUF model.</span></div>
+        <div class="item"><strong>Kev-style API</strong><span>Accepts <code>POST /v1/systemone</code> requests.</span></div>
+        <div class="item"><strong>Small setup</strong><span>Creates its own venv and model directory under your home folder.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Quickstart</h2>
+      <pre><code>sudo apt install ./local-jev_*.deb
+local-jev setup
+local-jev serve</code></pre>
+      <p>The default server listens on <code>127.0.0.1:8010</code>.</p>
+    </section>
+
+    <section>
+      <h2>Example</h2>
+      <pre><code>curl -s http://127.0.0.1:8010/v1/systemone \
+  -H 'content-type: application/json' \
+  -d '{"state":"The deployment completed and health checks passed.",
+       "questions":{"success":{"type":"noul",
+       "instructions":"Did the deployment succeed?"}}}'</code></pre>
+    </section>
+
+    <section>
+      <h2>Disclaimer</h2>
+      <p class="notice">
+        local-jev downloads and runs third-party model files and uses model
+        output to score decisions. It is provided as is, without warranty of
+        any kind. You alone are responsible for installing, running, and acting
+        on its output. Do not rely on it for safety-critical, legal, medical,
+        financial, employment, law-enforcement, or similarly sensitive
+        decisions without independent review.
+      </p>
+    </section>
+
+    <section>
+      <h2>Author</h2>
+      <p>
+        Published by <a href="https://ramazan-yavuz.tr">Ramazan Yavuz</a> as
+        an independent open-source project.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
