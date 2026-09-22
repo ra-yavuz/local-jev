@@ -9,7 +9,7 @@ need a chat response. They need a typed answer. Is this true? Which option
 fits? How severe is it?
 
 local-jev packages that pattern for local machines. It installs a small
-runtime, downloads an open GGUF model, and exposes a Kev-style
+runtime, downloads an open GGUF model, and exposes a System One-shaped
 `/v1/systemone` API for:
 
 - yes or no decisions (`noul`)
@@ -19,7 +19,7 @@ runtime, downloads an open GGUF model, and exposes a Kev-style
 It is not official TypeSafe Jev, does not include TypeSafe weights, and is not
 endorsed by TypeSafe. It is a practical local approximation of the Jev-style
 interface, using llama.cpp and direct next-token logits over declared answer
-options.
+options. It does not ask a model to write JSON and then parse the text.
 
 The appeal is speed, privacy, and simple integration: install the package, run
 setup once, then ask local typed questions over HTTP.
@@ -34,7 +34,7 @@ local-jev gives you a local version of that workflow:
 
 - Route support tickets without sending text to a hosted API.
 - Ask an agent guardrail question before a tool call.
-- Classify whether a document is about a named person.
+- Classify whether a document matches a declared topic.
 - Score urgency, severity, relevance, or policy fit.
 - Replace fragile prompt-to-JSON flows with fixed answer options.
 
@@ -46,9 +46,9 @@ and the larger preset is there when you want better local behavior.
 - Downloads a small GGUF model on first setup.
 - Creates an isolated runtime venv under `~/.local/share/local-jev`.
 - Starts a local HTTP API on `127.0.0.1:8010`.
-- Accepts Kev-style `POST /v1/systemone` requests.
-- Scores declared options directly from model logits. It does not generate
-  prose.
+- Accepts System One-style `POST /v1/systemone` requests.
+- Scores declared options directly from model logits instead of generating
+  prose or JSON.
 - Keeps the installed `.deb` small. Model files are downloaded by
   `local-jev setup`.
 
@@ -198,8 +198,94 @@ list labelled `A` through `P`. It evaluates the prompt with `llama-cpp-python`
 and reads the model logits for the allowed answer letters. A softmax over
 those letters becomes the option distribution.
 
-This is useful for routing, triage, and entity-resolution checks where the
-question can be expressed as a small set of explicit choices.
+This is useful for routing, triage, and relevance checks where the question can
+be expressed as a small set of explicit choices.
+
+### What Logits Mean Here
+
+A language model does not begin by writing words. At each position, it produces
+one raw score for every token in its vocabulary. Those raw scores are logits.
+Higher logits mean the model considers that token more likely as the next
+token.
+
+A normal wrapper often does this:
+
+```text
+prompt -> model writes text -> parse text into JSON
+```
+
+local-jev does this instead:
+
+```text
+prompt -> read only the A/B/C option logits -> return structured JSON
+```
+
+For a `choice` question with three options, local-jev builds a prompt whose
+answer must be `A`, `B`, or `C`. It runs one forward pass, looks only at the
+logits for those letters, and applies softmax so the selected scores sum to
+1.0. The returned probabilities are the normalized scores for the declared
+options.
+
+That is why the model never needs to write output like this:
+
+```json
+{"choice": "billing"}
+```
+
+It only has to make `A` more likely than `B` or `C` at the answer position.
+local-jev maps the winning letter back to your option id.
+
+### Why This Is Useful
+
+Direct option-logit scoring has practical benefits:
+
+- The response shape is controlled by code, not by text parsing.
+- The model cannot add an unexpected key, sentence, apology, or markdown block.
+- Each question returns an option distribution, not only a final label.
+- The local server can answer small decision questions without a hosted API
+  call.
+
+It also has limits:
+
+- The probabilities are not automatically calibrated accuracy estimates.
+- A general GGUF model was not trained specifically for System One decisions.
+- Option wording and option order can affect the result.
+- Long or confusing evidence can still make a small model fail.
+
+So local-jev is best understood as a local decision scorer. It is closer to a
+Jev-style readout than prompt-to-JSON generation, but it is still using normal
+open LLM weights underneath.
+
+## Kev And local-jev
+
+[Kev](https://github.com/jaredpalmer/kev) is an open Jev-like family of
+decision models built on Qwen3.5. It includes trained weights, evaluation data,
+training code, a playground, and a System One-compatible server. Kev is closer
+to the Jev idea because it trains adapters and a decision readout for this
+task.
+
+local-jev is smaller and simpler. It does not train a new model. It uses a
+regular local GGUF model and reads the answer-letter logits directly. That
+makes it easy to install and useful for experimentation, but it should not be
+confused with a trained Kev or Jev model.
+
+You can compare both APIs with the helper script:
+
+```bash
+# terminal 1: start local-jev
+local-jev serve
+
+# terminal 2: clone Kev, install its serving dependencies, and start Kev-0.8B
+scripts/try-kev.sh serve
+
+# terminal 3: send the same sample request to both servers
+scripts/try-kev.sh compare
+```
+
+By default, the script uses Kev on `127.0.0.1:8009` and local-jev on
+`127.0.0.1:8010`. Set `KEV_RUN=jaredpalmer/kev-4b` if you want to try the
+larger Kev model. In the Debian package, the same helper is installed as
+`/usr/share/doc/local-jev/examples/try-kev.sh`.
 
 ## Limits
 

@@ -122,15 +122,35 @@
         local-jev is a small local service for typed decisions: yes or no,
         multiple choice, and ordered ratings. It packages the Jev-style idea
         into a local tool that downloads an open GGUF model, runs llama.cpp,
-        and reads answer probabilities from logits instead of generating prose.
-        It is not official TypeSafe Jev and does not include TypeSafe weights.
+        and reads answer probabilities from logits instead of generating prose
+        or JSON. It is not official TypeSafe Jev and does not include TypeSafe
+        weights.
       </p>
       <div class="grid">
         <div class="item"><strong>Local by default</strong><span>Runs on your machine after downloading a GGUF model.</span></div>
         <div class="item"><strong>Jev-style decisions</strong><span>Use fixed answer options for <code>noul</code>, <code>choice</code>, and <code>score</code>.</span></div>
-        <div class="item"><strong>Kev-style API</strong><span>Accepts <code>POST /v1/systemone</code> requests on localhost.</span></div>
+        <div class="item"><strong>System One API</strong><span>Accepts <code>POST /v1/systemone</code> requests on localhost.</span></div>
         <div class="item"><strong>Agent-friendly</strong><span>Route tasks, check policy, classify relevance, or gate tool calls.</span></div>
       </div>
+    </section>
+
+    <section>
+      <h2>Logits, Not Parsed Text</h2>
+      <p>
+        A normal LLM wrapper asks the model to write text, then tries to parse
+        that text into JSON. local-jev takes a shorter path. It builds a prompt
+        with evidence, a question, and fixed answer options labelled
+        <code>A</code>, <code>B</code>, <code>C</code>, and so on. Then it runs
+        the local GGUF model once and reads only the next-token logits for
+        those allowed letters.
+      </p>
+      <p>
+        Logits are the raw scores a language model gives to possible next
+        tokens. local-jev applies softmax to the selected answer-letter logits,
+        so they become an option distribution. The model never has to write
+        <code>{"choice":"billing"}</code>. It only has to make one allowed
+        letter more likely than the others.
+      </p>
     </section>
 
     <section>
@@ -158,6 +178,18 @@ local-jev serve</code></pre>
   -d '{"state":"The deployment completed and health checks passed.",
        "questions":{"success":{"type":"noul",
        "instructions":"Did the deployment succeed?"}}}'</code></pre>
+    </section>
+
+    <section>
+      <h2>Kev Comparison</h2>
+      <p>
+        Kev is a separate open Jev-like model family built on Qwen3.5, with
+        trained adapters, a decision readout, evaluation data, and a compatible
+        server. local-jev is smaller: it uses regular local GGUF weights and
+        reads answer-letter logits directly. The repository includes
+        <code>scripts/try-kev.sh</code> so you can run Kev beside local-jev and
+        send both servers the same sample request.
+      </p>
     </section>
 
     <section>

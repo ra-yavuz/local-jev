@@ -16,7 +16,7 @@ Description: local Jev-style decision API over GGUF models
  local-jev runs a small local HTTP service for typed decisions: yes or no,
  multiple choice, and ordered ratings. It creates an isolated Python runtime
  under the user's home directory, downloads a selected GGUF model, and serves
- a Kev-style /v1/systemone API on localhost.
+ a System One-style /v1/systemone API on localhost.
  .
  The package does not include model weights. Run local-jev setup after
  installing to download the default model and runtime dependencies.

@@ -1,3 +1,10 @@
+local-jev (0.1.1) stable; urgency=medium
+
+  * Explain direct answer-logit scoring in the README and project page.
+  * Add a helper script for trying Kev beside local-jev.
+
+ -- Ramazan Yavuz <yavuzramazan1994@gmail.com>  Tue, 22 Sep 2026 15:58:00 +0300
+
 local-jev (0.1.0) stable; urgency=medium
 
   * Initial release.

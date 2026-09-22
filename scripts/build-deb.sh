@@ -13,6 +13,7 @@ mkdir -p "$PKG_DIR/DEBIAN" \
          "$PKG_DIR/usr/bin" \
          "$PKG_DIR/usr/lib/local-jev" \
          "$PKG_DIR/usr/share/doc/local-jev" \
+         "$PKG_DIR/usr/share/doc/local-jev/examples" \
          "$PKG_DIR/usr/share/doc/local-jev/html"
 
 install -m 0755 "$ROOT/bin/local-jev"                         "$PKG_DIR/usr/bin/local-jev"
@@ -20,6 +21,7 @@ install -m 0644 "$ROOT/lib/local-jev/local_jev_runtime.py"    "$PKG_DIR/usr/lib/
 install -m 0644 "$ROOT/README.md"                             "$PKG_DIR/usr/share/doc/local-jev/README.md"
 install -m 0644 "$ROOT/LICENSE"                               "$PKG_DIR/usr/share/doc/local-jev/copyright"
 install -m 0644 "$ROOT/docs/index.html"                       "$PKG_DIR/usr/share/doc/local-jev/html/index.html"
+install -m 0755 "$ROOT/scripts/try-kev.sh"                    "$PKG_DIR/usr/share/doc/local-jev/examples/try-kev.sh"
 install -m 0755 "$ROOT/debian/postinst"                       "$PKG_DIR/DEBIAN/postinst"
 install -m 0755 "$ROOT/debian/postrm"                         "$PKG_DIR/DEBIAN/postrm"
 
@@ -36,7 +38,7 @@ Description: local Jev-style decision API over GGUF models
  local-jev runs a small local HTTP service for typed decisions: yes or no,
  multiple choice, and ordered ratings. It creates an isolated Python runtime
  under the user's home directory, downloads a selected GGUF model, and serves
- a Kev-style /v1/systemone API on localhost.
+ a System One-style /v1/systemone API on localhost.
  .
  The package does not include model weights. Run local-jev setup after
  installing to download the default model and runtime dependencies.
